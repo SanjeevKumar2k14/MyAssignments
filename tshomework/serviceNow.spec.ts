@@ -1,0 +1,28 @@
+import test, { expect } from "@playwright/test"
+
+test("Service Now",async({page})=>{
+    await page.goto("https://dev293266.service-now.com/")
+    await page.locator("#user_name").fill("admin")
+    await page.locator("#user_password").fill("2Fc6-=ThfPFm")
+    await page.click("#sysverb_login")
+    let Title =await page.title()
+    await expect(Title).toContain("ServiceNow")
+    console.log(Title)
+    await page.locator("#d6e462a5c3533010cbd77096e940dd8c").click()
+    await page.locator("span[class='label']").nth(3).click()
+    let frame= page.frameLocator("#gsft_main")
+    await frame.getByAltText("Mobiles").click()
+    await frame.locator("#item_link_ec80c13297968d1021983d1e6253af32").click()
+    await frame.locator("[class='radio-label']").first().click()
+    await frame.locator("[class='cat_item_option sc-content-pad form-control']").fill("1234567890")
+    await frame.locator("[class='form-control cat_item_option ']").selectOption({index:1})
+    await frame.locator("//label[text()='Midnight']").click()
+    await frame.locator("//label[contains(text(),'256 GB')]").click()
+    await frame.getByRole("button",{name:"Order Now"}).click()
+
+  let orderplaced= frame.locator("[class='notification notification-success']")
+  console.log(orderplaced)
+  console.log(await expect(orderplaced).toBeVisible())
+  await page.waitForTimeout(3000)
+  await page.screenshot({ path:'utilis/screenshot.png', fullPage:true})
+  })
